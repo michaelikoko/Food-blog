@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-aboutpage{% endblock %}
+
+
+{% block content %}
+<div class="about_page overflow-hidden">
+    {% image page.title_image original as title_image %}
+    <div class="d-flex flex-column align-items-center justify-content-center p-4" 
+        style="background-image:url('{{ title_image.url }}');  background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;"
+    >
+        <div class="bg-danger text-white fs-1 fw-bold rounded pt-2 pb-2 ps-5 pe-5 animate__animated animate__tada">About us</div>
+    </div>
+
+    <div class="position-relative">
+        <div class="custom-shape-divider-bottom-1672677570">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+
+        <div class="container " style="padding-bottom: 10rem; padding-top: 4rem;">
+            {% for block in page.body %}
+                <div class="row g-5">
+                    <div class="col-lg-6 col-12 d-flex align-items-start justify-content-center text-start lead fs-5">
+                        {{ block.value.content_text }}
+                    </div>
+                    <div class="col-lg-6 col-12">
+                        {% image block.value.content_image original class="img-fluid rounded" %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div style="background-color: #f4f7fb;">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-6 col-12 d-flex flex-column align-items-start justify-content-center">
+                    <div class="fs-2 text-secondary fw-bold mb-5">Subscribe to our newsletter</div>
+                    <form class="d-flex flex-row align-items-start justify-content-center w-100" action="{% url 'newsletter_subscribe' %}" method="post" id="newsletterForm">
+                        {% csrf_token %}
+                        <div class="input-group has-validation">
+                            <input class="form-control form-control-lg" type="email" placeholder="Your Email" aria-label="Email" name="email" id="email-input"  aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback" required>
+                            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                                Email already exists
+                            </div>
+                        </div>
+
+                        <button class="btn btn-danger btn-lg ms-1 d-flex flex-row align-items-center justify-content-center" type="submit" id="submit-button">
+                            <span>Subscribe</span>
+                        </button>
+                    </form>
+                    <p class="text-lead mt-4 fst-italic text-muted">
+                        Stay informed and never miss a recipe again! Subscribe to our newsletter and be the first to know about new recipes, cooking tips and special promotions. Don't miss out on the fun, subscribe to our newsletter today!
+                    </p>
+                </div>
+    
+                <div class="col-lg-6 col-12">
+                    <img src="{% static 'rice.jpg' %}" alt="Jollof rice image" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </div>
+  
+  <!-- Modal -->
+    <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center justify-content-center p-lg-5 p-3">
+                <img src="{% static 'confetti-birthday.svg' %}" alt="" class="img-fluid" width="80" height="80">
+                <p class="h2 mt-4 text-center">Thank you for subscribing!</p>
+                <p class="lead text-center mt-3">You have successfully subscribed to our newsletter. We'll keep you posted on the latest Nigerian recipes.</p>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let form = document.getElementById("newsletterForm");
+    form.addEventListener("submit", async function(event){
+        event.preventDefault();
+
+        function createSpinner()
+        {
+            let spinnerSpan = document.createElement("span");
+            spinnerSpan.className = "spinner-border spinner-border-sm me-2";
+            spinnerSpan.setAttribute("role", "status");
+            spinnerSpan.setAttribute("aria-hidden", "true");
+
+            return spinnerSpan;
+        }
+
+        let input = document.getElementById("email-input");
+        let button = document.getElementById("submit-button");
+
+        const url = "{% url 'newsletter_subscribe' %}";
+        let formData = new FormData();
+        formData.append('email', form.elements.email.value);
+        formData.append('csrfmiddlewaretoken', form.elements.csrfmiddlewaretoken.value);
+        
+        let spinnerSpan = createSpinner();
+        button.insertBefore(spinnerSpan, button.firstChild);
+        const response = await fetch(url, {
+            body: formData,
+            method: "post"
+        });
+        
+        let error_feedback = document.getElementById("validationServerUsernameFeedback");
+        switch (response.status)
+        {
+            case(400):
+                error_feedback.innerText = "Invalid email address.";
+                input.classList.add("is-invalid");
+                spinnerSpan.remove();
+                break;
+
+            case(409):
+                error_feedback.innerText = "Email already exists.";
+                input.classList.add("is-invalid");
+                spinnerSpan.remove();
+                break;
+
+            case(200):
+                input.classList.remove("is-invalid");
+                spinnerSpan.remove();
+                let myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {});
+                myModal.show();
+                input.value = "";
+                break;
+            
+            default:
+                error_feedback.innerText = "An error occured.";
+                input.classList.add("is-invalid");
+                spinnerSpan.remove();
+                break;
+        }
+    
+    })
+
+    let input = document.getElementById("email-input");
+    input.addEventListener("blur", function(event){
+        input.classList.remove("is-invalid");
+
+    })
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,61 @@
+{% load custom_newsletter_tags %}
+{% load wagtailcore_tags %}
+{% load static %}
+
+{% load mjml %}
+
+{% mjml %}
+<mjml>
+    <mj-body background-color="#ffffff">
+        <mj-section background-color="#ffffff" padding-bottom="0px" padding-top="0">
+            <mj-column vertical-align="top" width="100%">
+                <mj-image
+                    src="https://media.istockphoto.com/id/1327486548/es/foto/sopa-nigeriana-de-okra-con-garri.jpg?s=612x612&w=0&k=20&c=o1jHBxYySxlSVjJzFUYQFErFwTaDa3d2836b76rmRzc="
+                    alt="" align="center" border="none" width="600px" padding-left="0px" padding-right="0px"
+                    padding-bottom="0px" padding-top="0"></mj-image>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#dc3545" padding-bottom="0px" padding-top="0">
+            <mj-column vertical-align="top" width="100%">
+                <mj-text align="left" color="#ffffff" font-size="45px" font-weight="bold"
+                    font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"
+                    padding-bottom="30px" padding-top="50px">Welcome aboard</mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#dc3545" padding-bottom="20px" padding-top="20px">
+            <mj-column vertical-align="middle" width="100%">
+                <mj-text align="left" color="#ffffff" font-size="22px"
+                    font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"><span
+                        style="color:#ffffff">Dear <span style="text-decoration: none; color: #ffffff;">{{subscriber.email}}</span></span><br /><br /> Welcome
+                    to 9ja Food blog.</mj-text>
+                <mj-text align="left" color="#ffffff" font-size="22px"
+                    font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"
+                    padding-bottom="35px">
+                    Thank you for subscribing to our newsletter! We are thrilled to have you as a part of our community of food enthusiasts. Your subscription means a lot to us, and we can't wait to share our latest recipes, cooking tips, and special promotions with you. We promise to keep your inbox interesting and delicious.
+                    As a subscriber, you will have access to exclusive content, such as new recipes, cooking tutorials, and special promotions. You will also be the first to know about any updates or changes to our blog.
+                    We are committed to providing you with the best possible experience, and we value your feedback and suggestions. If you have any questions or comments, please do not hesitate to contact us.
+                    Once again, thank you for subscribing to our newsletter. We look forward to cooking up a storm with you!
+                </mj-text>
+                    <mj-button align="left" font-size="22px" font-weight="bold" background-color="#ffc107"
+                        border-radius="10px" color="#1AA0E1" font-family="open Sans Helvetica, Arial, sans-serif">
+                        <a href="{% domain %}{% slugurl 'recipes' %}" style="text-decoration: none; color: #ffffff;">
+                            View Recipes
+                        </a>
+                    </mj-button>
+                <mj-text align="left" color="#ffffff" font-size="16px"
+                    font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"
+                    padding-top="20px">Thanks, <br /> The 9ja Food Blog Team</mj-text>
+
+                <mj-text align="left" color="#ffffff" font-size="16px"
+                    font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"
+                    padding-top="50px">
+                    Click <a href="{% absolute_unsubscribe_url subscriber.id %}">here</a> to unsubscribe.
+                </mj-text>
+            </mj-column>
+
+
+        </mj-section>
+
+    </mj-body>
+</mjml>
+{% endmjml %}

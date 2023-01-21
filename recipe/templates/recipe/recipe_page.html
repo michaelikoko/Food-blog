@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load comments %}
+{% load comments_xtd %}
+{% load social_share %}
+
+
+{% block body_class %}template-recipepage{% endblock %}
+
+
+{% block content %}
+<div class="recipe-post pb-5 px-lg-5 px-2 container" >
+    <div class="px-lg-5 px-1 d-flex flex-column py-5">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            {% if self.get_ancestors|length > 1 %}
+                <ol class="breadcrumb">
+                    {% for page in self.get_ancestors %}
+                        {% if page.is_root == False %}
+                            <li class="breadcrumb-item">
+                                <a href="{% pageurl page %}">{{ page.title }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ self.title }}</li>
+                </ol>
+            {% endif %}
+        </nav>
+    
+        <div class="my-3 d-flex flex-column align-items-start justify-content-center">
+            <div class="mb-3">
+                <div class="underline"></div>
+                <h1 class="fw-bold">{{ page.recipe_title }}</h1>
+            </div>
+            {% if page.recipe_title_text %}
+                <p class="lead">{{ page.recipe_title_text }}</p>
+            {% endif %}
+            <div class="d-flex flex-row align-items-center justify-content-between w-100 border-bottom border-top border-secondary border-opacity-25 py-1 mb-2">
+                <div class="d-flex flex-row align-items-center justify-content-center">
+                    <i class="ri-calendar-line"></i>
+                    <span class="text-muted fs-6 ms-2">
+                        {{ page.date }}
+                    </span>
+                </div>
+                <div class="d-flex flex-row align-items-center justify-content-center share-links">
+                    
+                    {% post_to_twitter "Check out our recipe post, {{ page.recipe_title }}!" object_or_url '<i class="ri-twitter-fill fs-3 ms-3" style="color: #1d9bf0;"></i>' %}
+                    {% post_to_facebook object_or_url '<i class="ri-facebook-box-fill fs-3 ms-3" style="color: #365899;"></i>' %}
+                    {% post_to_whatsapp object_or_url '<i class="ri-whatsapp-fill fs-3 ms-3" style="color: #25D366;"></i>' %}
+                </div>
+
+            </div>
+        </div>
+    
+        {% if page.recipe_image %}
+            {% image page.recipe_image original class="img-fluid w-100 mt-1 mb-1 rounded" style="max-height: 40rem;" %}
+        {% endif %}
+    
+        <div class="content mt-3">
+            {% for block in page.recipe_content %}
+                {% if block.value.ingredients %}
+                    <div class="table-responsive-lg">
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">Ingredient</th>
+                                    <th scope="col">Handy Measure</th>
+                                    <th scope="col">Metric</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                {% for item in block.value.ingredients %}
+                                    <tr>
+                                        <td>{{ item.ingredient }}</td>
+                                        <td>{{ item.handy_measure }}</td>
+                                        <td>{{ item.metric }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+                <div class="fs-4 border-start border-danger border-5 p-3">
+                    {{ block.value.body }}
+                </div>
+            {% endfor %}
+        </div>
+    
+        {% get_comment_count for page as comment_count %}
+        <div class="text-start fw-bold fs-5 py-3">
+            {{ comment_count }} comment{{ comment_count|pluralize}}
+            {% comment %}
+                {{ comment_count }} comment{{ comment_count|pluralize }} ha{{ comment_count|pluralize:"s,ve" }} been posted.
+            {% endcomment %}
+        </div>
+    
+        
+        {% if comment_count %}
+        <div class="media-list">
+            {% render_xtdcomment_tree for page %}
+        </div>
+        {% endif %}
+        
+        <div class="">
+            {% render_comment_form for page %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+

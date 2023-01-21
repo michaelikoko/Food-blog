@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+
+{% block content %}
+
+<div class="hero-carousel" >
+    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for item in page.carousel_images.all %}
+                {% image item.image original as image %}
+                {% if forloop.first %}
+                    <div 
+                        class="d-block w-100 d-flex flex-column align-items-center justify-content-center carousel-item active p-5" 
+                        style="background-image:url('{{ image.url }}');  
+                            background-size: cover;
+                            background-position: center center;
+                            background-repeat: no-repeat;
+                        "
+                    >
+                        {% for block in page.hero_carousel_text %}
+                            {% if forloop.first %}
+                                <div class="text-center mt-2 top text-white  ps-5 pe-5 pt-2 pb-2 rounded fs-1 fw-bolder animate__animated animate__flipInX">
+                                    {{ block.value }}
+                                </div>
+                            {% elif forloop.last %}
+                                <div class="text-center mt-2 bottom text-white  ps-5 pe-5 pt-2 pb-2 rounded fs-3 fw-bolder animate__animated animate__flipInX">
+                                    {{ block.value }}
+                                </div>
+                            {% else %}
+                                <div class="text-center mt-2 middle text-white  ps-5 pe-5 pt-2 pb-2 rounded fs-2 fw-bolder animate__animated animate__flipInX">
+                                    {{ block.value }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="d-block w-100 d-flex flex-column align-items-center justify-content-center carousel-item" 
+                        style="background-image:url('{{ image.url }}');  background-size: cover;
+                        background-position: center center;
+                        background-repeat: no-repeat;"
+                    >
+                        {% for block in page.hero_carousel_text %}
+                            {% if forloop.first %}
+                                <div class="text-center mt-2 top text-white  ps-5 pe-5 pt-2 pb-2 rounded fs-1 fw-bolder animate__animated animate__flipInX">
+                                    {{ block.value }}
+                                </div>
+                            {% elif forloop.last %}
+                                <div class="text-center mt-2 bottom text-white  ps-5 pe-5 pt-2 pb-2 rounded fs-3 fw-bolder animate__animated animate__flipInX">
+                                    {{ block.value }}
+                                </div>
+                            {% else %}
+                                <div class="text-center mt-2 middle text-white  ps-5 pe-5 pt-2 pb-2 rounded fs-2 fw-bolder animate__animated animate__flipInX">
+                                    {{ block.value }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+{% if latest_recipes %}
+    <div class="latest-recipes-container py-5">
+        <div class="container d-flex align-items-center justify-content-center">
+            <div class="latest-recipes row g-5 pt-5 pb-5 w-100">
+                <div>
+                    <div class="underline"></div>
+                    <h1 class="fw-bolder">Latest Recipes</h1>
+                </div>
+        
+                {% for recipe in latest_recipes %}
+                    {% image recipe.recipe_image original as image %}
+                    <div class="col-lg-4 col-md-6 col-12">
+                            <a href="{% pageurl recipe %}" class="text-decoration-none">
+                                <div class="recipe-card card p-1 shadow" 
+                                style="background-image: url('{{ image.url }}');  background-size: cover;
+                                    background-position: center center;
+                                    background-repeat: no-repeat;                        
+                                    "
+                                    data-image-url = "{{ image.url }}"
+                                    >
+                                    <div class="recipe-card-title fw-bold fs-6 rounded bg-danger">{{ recipe.recipe_title}}</div>
+                                </div>
+    
+                            </a>
+                    </div>
+        
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock content %}

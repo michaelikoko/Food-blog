@@ -1,0 +1,64 @@
+{% load i18n %}
+{% load comments %}
+
+<form method="POST" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;" class="pt-3 pb-3">
+    {% csrf_token %}
+    <fieldset>
+        <input type="hidden" name="next" value="{% url 'comments-xtd-sent' %}" />
+
+        <div class="alert alert-danger" data-comment-element="errors" hidden>
+        </div>
+
+        {% for field in form %}
+        {% if field.is_hidden %}<div>{{ field }}</div>{% endif %}
+        {% endfor %}
+
+        <div style="display:none">{{ form.honeypot }}</div>
+
+        <div class="form-group {% if 'comment' in form.errors %}has-danger{% endif %} form-floating mt-3">
+            {{ form.comment }}
+            <label for="id_comment">{{ form.comment.label }}</label>
+        </div>
+
+        {% if not request.user.is_authenticated %}
+        <div class="form-group {% if 'name' in form.errors %}has-danger{% endif %} form-floating mt-3">
+            {{ form.name }}
+            <label for="id_name">{{ form.name.label }}</label>
+        </div>
+        {% endif %}
+
+        {% if not request.user.is_authenticated or not request.user.email %}
+        <div class="form-group {% if 'email' in form.errors %}has-danger{% endif %} form-floating mt-3">
+            {{ form.email }}
+            <label for="id_email">{{ form.email.label }}</label>
+            <span class="form-text small">{{ form.email.help_text }}</span>
+        </div>
+        {% endif %}
+
+        {% comment %}
+        {% if not request.user.is_authenticated %}
+        <div class="form-group {% if 'url' in form.errors %}has-error{% endif %}">
+            <label for="id_url" class="col-form-label col-md-3 text-right">
+                {{ form.url.label }}
+            </label>
+            <div class="col-md-7">
+                {{ form.url }}
+            </div>
+        </div>
+        {% endif %}
+        {% endcomment %}
+
+        <div class="form-group custom-control custom-checkbox mt-3">
+            {{ form.followup }}
+            <label for="id_followup{% if cid %}_{{ cid }}{% endif %}" class="custom-control-label">&nbsp;{{ form.followup.label }}</label>
+        </div>
+
+    </fieldset>
+
+    <div class="form-group mt-3">
+        <input type="submit" name="post" value="{% trans 'send' %}" class="btn btn-outline-danger btn-md" />
+        {% comment %}
+        <input type="submit" name="preview" value="{% trans 'preview' %}" class="btn btn-outline-secondary btn-md" />
+        {% endcomment %}
+    </div>
+</form>

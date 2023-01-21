@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% load static wagtailcore_tags crispy_forms_tags wagtailimages_tags %}
+
+{% block body_class %}template-formpage{% endblock %}
+
+
+{% block content %}
+<div class="contact-page">
+    {% image page.title_image original as title_image %}
+    <div class="d-flex flex-column align-items-center justify-content-center p-4" style="background-image:url('{{ title_image.url }}');  background-size: cover;
+        background-position: center center;
+      background-repeat: no-repeat;">
+        <div class="bg-danger text-white fs-1 fw-bold rounded pt-2 pb-2 ps-5 pe-5 animate__animated animate__tada">
+            {{ page.title }}
+        </div>
+    </div>
+
+    <div class="container pt-5 pb-5">
+        <h5>{{ page.intro | richtext }}</h5>
+
+        <form action="{% pageurl page %}" method="POST">
+            {% csrf_token %}
+            {{ form | crispy }}
+            <button type="submit" class="btn btn-danger btn-lg">Submit</button>
+        </form>
+    </div>
+
+</div>
+
+
+{% endblock %}

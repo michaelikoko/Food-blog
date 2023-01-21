@@ -1,0 +1,139 @@
+{% extends "birdsong/mail/base_email.html" %}
+{% load custom_newsletter_tags %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block email_body %}
+
+{% for block in self.body %}
+	<mj-section>
+		<mj-column width="100%">
+			<mj-image href="{% domain %}" src="{% domain %}{% static 'newsletter.jpg' %}"></mj-image>
+		</mj-column>
+	</mj-section>
+
+
+	<mj-section padding-top="5px">
+		<mj-column width="100%">
+			{{ block.value.body }}
+		</mj-column>
+	</mj-section>
+	<mj-section>
+		<mj-column width="11%">
+			<mj-image padding-right="0px" padding-left="25px" align="left" width="70px"
+				href="https://twitter.com/michael_ikoko" src="{% domain %}{% static 'beerus-profile.png' %}"></mj-image>
+		</mj-column>
+		<mj-column width="89%">
+			<mj-text padding="0 25px">
+				<p style="color:#BDBDBD; line-height: 9px"> Michael Ikoko
+				<p style="font-style: italic; color:#BDBDBD; line-height: 9px"> 9ja Food Blog</p>
+			</mj-text>
+		</mj-column>
+	</mj-section>
+	<mj-section>
+		<mj-column width="100%">
+			<mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
+		</mj-column>
+	</mj-section>
+
+	{% if block.value.linked_recipes%}
+		{% for recipe in block.value.linked_recipes %}
+			{% image recipe.specific.recipe_image fill-200x200 as recipe_image%}
+			<mj-section>
+				<mj-column width="75%">
+					<mj-text>
+						<h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0"> 
+							<a href="{% domain %}{% pageurl recipe %}" style="color: #3498DB; text-decoration: none">
+								{{ recipe.recipe_title }}
+							</a> 
+						</h3>
+						{% for block in recipe.specific.recipe_content %}
+						<p style="font-size: 14px">
+							{{ block.value.body|truncatechars_html:100 }}
+						</p>
+						{% endfor %}
+					</mj-text>
+				</mj-column>
+				<mj-column width="25%">
+					<mj-image width="100px" href="{% domain %}{% pageurl recipe %}" src="{% domain %}{{ recipe_image.url }}"></mj-image>
+				</mj-column>
+			</mj-section>
+		{% endfor %}
+	{% endif %}
+
+	<mj-section>
+		<mj-column width="100%">
+			<mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
+		</mj-column>
+	</mj-section>
+
+	<mj-section>
+		<mj-column width="65%">
+			<mj-image align="left" width="150px" href="https://recast.ai?ref=newsletter"src="{% static 'logo.png' %}"></mj-image>
+		</mj-column>
+		<mj-column width="35%">
+			{% comment %}
+				<!-- Create the various social media handle and link them here-->
+					<mj-table>
+						<tr style="list-style: none;line-height:1">
+						<td>
+							<a href="https://twitter.com/michael_ikoko">
+								<img width="25" src="https://cdn.recast.ai/newsletter/twitter.png" />
+							</a> 
+						</td>
+						<td>
+							<a href="https://www.facebook.com/recastAI">
+								<img width="25" src="https://cdn.recast.ai/newsletter/facebook.png" />
+							</a> </td>
+						<td>
+							<a href="https://medium.com/@RecastAI">
+								<img width="25" src="https://cdn.recast.ai/newsletter/medium.png" />
+							</a> </td>
+						<td> 
+							<a href="https://www.youtube.com/channel/UCA0UZlR8crpgwFiVaSTbVWw">
+								<img width="25" src="https://cdn.recast.ai/newsletter/youtube.png" />
+							</a> </td>
+						<td> 
+							<a href="https://plus.google.com/u/0/+RecastAi">
+								<img width="25" src="https://cdn.recast.ai/newsletter/google%2B.png" />
+							</a> </td>
+						</tr>
+					</mj-table>
+			{% endcomment %}
+		</mj-column>
+	</mj-section>
+
+	<mj-section>
+		<mj-column>
+			<mj-text align="center">
+				Click <a href="{% absolute_unsubscribe_url contact.id %}">here</a> to unsubscribe.
+	
+			</mj-text>
+		</mj-column>
+	</mj-section>
+{% endfor %}
+
+{% comment %}
+<mj-section>
+	<mj-column>
+		<mj-text>Hello {{ contact.email }}!</mj-text>
+		{% for block in self.body %}
+		{% if block.value.linked_recipes%}
+		{% for recipe in block.value.linked_recipes %}
+		<mj-text>Hey</mj-text>
+		{% endfor %}
+		{% endif %}
+		{{ block.value.body }}
+		{% endfor %}
+	</mj-column>
+</mj-section>
+<mj-section>
+	<mj-column>
+		<mj-text align="center">
+			Click <a href="{% absolute_unsubscribe_url contact.id %}">here</a> to unsubscribe.
+
+		</mj-text>
+	</mj-column>
+</mj-section>
+{% endcomment%}
+{% endblock email_body %}

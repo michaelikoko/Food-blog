@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load custom_newsletter_tags %}
+
+{% block body_class %}template-unsubscribe{% endblock %}
+
+
+{% block content %}
+
+<div class="container d-flex flex-column align-items-center justify-content-center pb-5 mb-5">
+    <div>
+        <img src="{% static 'angry_cat.png' %}" alt="Angry cat" class="img-fluid rounded" style="height: 12rem;">
+    </div>
+    <div class="h2 text-danger fw-bolder mt-5 mb-4 text-uppercase text-center">You are unsubscribed</div>
+    <p class="fs-5 fw-normal lead text-center">{{ contact.email }} has successfully been unsubscribed from our email
+        newsletter.
+    </p>
+    <p class="fs-5 fw-normal lead text-center mb-5">
+        If this was a mistake, follow <a href="{% domain %}{% slugurl 'about' %}">this link</a> to rejoin
+    </p>
+</div>
+
+{% endblock %}

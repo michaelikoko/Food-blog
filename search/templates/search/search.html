@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-searchresults{% endblock %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+{% comment %}
+<!--
+    <h1>Search</h1>
+    
+    <form action="{% url 'search' %}" method="get">
+        <input type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
+        <input type="submit" value="Search" class="button">
+    </form>
+-->
+{% endcomment %}
+{% if search_results %}
+    {% comment %}
+    <!--
+        <ul>
+            {% for result in search_results %}
+            <li>
+                <h4><a href="{% pageurl result %}">{{ result }}</a></h4>
+                {% if result.search_description %}
+                {{ result.search_description }}
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+
+        {% if search_results.has_previous %}
+        <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        {% if search_results.has_next %}
+        <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
+        {% endif %}
+    -->
+    {% endcomment %}
+
+    <div class="search-results">
+        <div class="container">
+            <div class="latest-recipes row g-5 pt-5 pb-5 w-100">
+                <div>
+                    <div class="underline"></div>
+                    <h1>Search Results</h1>
+                    {% if search_results_number == 1 %}
+                        <div class="lead fs-5">{{ search_results_number }} result for: "{{ search_query }}"</div>
+                    {% else %}
+                        <div class="lead fs-5">{{ search_results_number }} results for: "{{ search_query }}"</div>
+                    {% endif %}
+                </div>
+        
+                {% for recipe in search_results %}
+                    {% image recipe.specific.recipe_image original as image %}
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <a href="{% pageurl recipe %}" class="text-decoration-none">
+                            <div class="recipe-card card p-2 shadow" 
+                            style="background-image: url('{{ image.url }}');  background-size: cover;
+                                background-position: center center;
+                                background-repeat: no-repeat;"
+                                data-image-url = "{{ image.url }}"
+
+                                >
+                                <div class="recipe-card-title fw-bold fs-6 rounded bg-danger ">{{ recipe.specific.recipe_title}}</div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="mt-5">
+                {% if search_results.paginator.num_pages > 1 %}
+                    <nav aria-label="Page navigation example ">
+                        <ul class="pagination pagination-lg justify-content-center">
+                            {% if search_results.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link " aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                    
+                            {% for page_num in search_results.paginator.page_range %}
+                                <li 
+                                    class="
+                                    page-item 
+                                    {% if page_num == search_results.number %} 
+                                        active 
+                                    {% endif %}
+                                    "
+                                >
+                                    <a class="page-link" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ page_num }}">
+                                        {{ page_num }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                    
+                            {% if search_results.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link" aria-label="Previous">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% elif search_query %}
+    <div class="">
+        <div class="container">
+            <div class="latest-recipes row g-5 pt-5 pb-5 w-100">
+                <div>
+                    <div class="underline"></div>
+                    <h1>Search Results</h1>
+                        <div class="lead fs-5">No results found for: "{{ search_query }}"</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
