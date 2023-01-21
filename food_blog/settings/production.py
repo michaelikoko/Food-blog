@@ -13,6 +13,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 DEBUG = False
 
+SECRET_KEY = env("SECRET_KEY")
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
