@@ -5,6 +5,10 @@ FROM python:${PYTHON_VERSION}
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+RUN apt-get update && apt-get install -y curl
+RUN curl --silent --location https://deb.nodesource.com/setup_18.x | bash -
+RUN apt-get install -y nodejs
+
 RUN mkdir -p /code
 
 WORKDIR /code
@@ -15,6 +19,9 @@ RUN set -ex && \
     pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt && \
     rm -rf /root/.cache/
+
+COPY ["package.json", "package-lock.json*", "./"]
+RUN npm install --production
 
 COPY . /code/
 
