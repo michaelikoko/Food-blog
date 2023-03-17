@@ -50,6 +50,9 @@ INSTALLED_APPS = [
 
     'wagtail.contrib.modeladmin',  
     'wagtailmenus',
+
+    'birdsong',
+
     'crispy_forms',
     "crispy_bootstrap5",
     'django_extensions',
@@ -62,7 +65,6 @@ INSTALLED_APPS = [
     'newsletter',
 
     'mjml',
-    'birdsong',
 
     'django_social_share',
 
