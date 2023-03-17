@@ -13,18 +13,27 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 DEBUG = False
 
+ALLOWED_HOSTS = ["*"]
+
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = True
+
+SECURE_SSL_REDIRECT = True
+
+
 SECRET_KEY = env("SECRET_KEY")
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': env("MYSQL_NAME"),
-        'USER': env("MYSQL_USER"),
-        'PASSWORD': env("MYSQL_PASSWORD"),
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': env("MYSQL_NAME"),
+#        'USER': env("MYSQL_USER"),
+#        'PASSWORD': env("MYSQL_PASSWORD"),
+#        'HOST': 'localhost',
+#        'PORT': '3306',
+#    }
+#}
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
