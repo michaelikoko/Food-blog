@@ -35,6 +35,10 @@ SECRET_KEY = env("SECRET_KEY")
 #    }
 #}
 
+DATABASES = {
+    "default": env.dj_db_url("DATABASE_URL", default="sqlite:///db.sqlite3"),
+}
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")

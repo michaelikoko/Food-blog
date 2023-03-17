@@ -47,3 +47,5 @@ wagtail-markdown==0.10.0
 wagtailmenus==3.1.3
 webencodings==0.5.1
 Willow==1.4.1
+whitenoise==6.4.0
+psycopg2-binary==2.9.5
