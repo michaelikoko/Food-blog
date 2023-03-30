@@ -10,9 +10,9 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('birdsong', '0007_alter_contacttag_tag'),
-    ]
+    #dependencies = [
+    #    ('birdsong', '0007_alter_contacttag_tag'),
+    #]
 
     operations = [
         migrations.CreateModel(

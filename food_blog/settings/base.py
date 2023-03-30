@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+#    'whitenoise.runserver_nostatic', Don't need Whitenoise in pythonanywhere
     "django.contrib.staticfiles",
 
     'django.contrib.sites',
@@ -67,8 +68,6 @@ INSTALLED_APPS = [
     'mjml',
 
     'django_social_share',
-
-    "whitenoise.runserver_nostatic"
 ]
 
 SITE_ID = 1
@@ -102,7 +101,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # new
+    #"whitenoise.middleware.WhiteNoiseMiddleware",  # new
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -134,19 +133,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "food_blog.wsgi.application"
-
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-#DATABASES = {
-#    "default": {
-#        "ENGINE": "django.db.backends.sqlite3",
-#        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-#    }
-#}
-
-
 
 
 # Password validation
@@ -211,7 +197,7 @@ MEDIA_URL = "/media/"
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "food_blog"
+WAGTAIL_SITE_NAME = "9ja Food Blog"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
