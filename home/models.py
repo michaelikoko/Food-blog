@@ -23,7 +23,7 @@ class HomePage(Page):
         ], heading="Hero Section")
     ]
 
-    parent_page_types = []
+    #parent_page_types = []
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
